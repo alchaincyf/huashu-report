@@ -122,7 +122,7 @@ def hbar(data, w=470, rowh=22, maxv=None, fmt="{}%", label_w=None,
     label_w 和右侧数值区都由实际文字宽度反算（见 text_w 的说明），
     传 label_w 只在你要跨多张图对齐左栏时才用。
     """
-    maxv = maxv or max(v for _, v in data) * 1.16
+    maxv = maxv if maxv is not None else max(v for _, v in data) * 1.16
     h = rowh * len(data) + 22
     # 左栏按最长类别名算，右侧按最长数值标注算。两边都写死过，两边都出过界。
     if label_w is None:
@@ -234,7 +234,7 @@ def line_chart(series, xlabels, w=470, h=190, ymin=None, ymax=None, unit="%",
     pad_r = max(40, max(text_w(name, 7.6) for name, _, _ in series) + 12)
     vals = [v for _, ys, _ in series for v in ys]
     ymin = 0 if ymin is None else ymin
-    ymax = ymax or max(vals) * 1.15
+    ymax = ymax if ymax is not None else max(vals) * 1.15
     pw, ph = w - pad_l - pad_r, h - pad_b - pad_t
     n = len(xlabels)
     def X(i): return pad_l + pw * i / max(1, n - 1)
