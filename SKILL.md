@@ -5,7 +5,7 @@ metadata:
   author: "花叔"
   homepage: "https://github.com/alchaincyf"
   repository: "https://github.com/alchaincyf/huashu-report"
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # 报告写作
