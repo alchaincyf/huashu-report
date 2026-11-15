@@ -24,6 +24,11 @@
 """
 import asyncio, os, re, subprocess, sys, tempfile
 
+def _tool(name):
+    """Resolve an external tool, with optional HUASHU_<NAME> override on Windows."""
+    override = os.environ.get("HUASHU_" + name.upper().replace("-", "_"))
+    return override or name
+
 # ── 配置：改成你的报告标题 ─────────────────────────────────
 REPORT_TITLE = "报告标题"
 
@@ -65,12 +70,12 @@ async def _render(html, pdf, title):
 
 
 def page_count(pdf):
-    out = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True).stdout
+    out = subprocess.run([_tool("pdfinfo"), pdf], capture_output=True, text=True).stdout
     return int(out.split("Pages:")[1].split()[0])
 
 
 def page_texts(pdf, n):
-    return {p: subprocess.run(["pdftotext", "-f", str(p), "-l", str(p), pdf, "-"],
+    return {p: subprocess.run([_tool("pdftotext"), "-f", str(p), "-l", str(p), pdf, "-"],
                               capture_output=True, text=True).stdout
             for p in range(1, n + 1)}
 
@@ -155,7 +160,7 @@ def geometry_check(pdf):
     issues, fullbleed, blank_bottom = [], [], []
     band = int(FOOTER_BAND_MM / _MM)
     with tempfile.TemporaryDirectory() as td:
-        subprocess.run(["pdftoppm", "-gray", "-r", str(GEO_DPI), pdf,
+        subprocess.run([_tool("pdftoppm"), "-gray", "-r", str(GEO_DPI), pdf,
                         os.path.join(td, "g")], check=True)
         for f in sorted(os.listdir(td)):
             pno = int(f.rsplit("-", 1)[-1].split(".")[0])

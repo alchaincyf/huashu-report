@@ -20,6 +20,18 @@
 
 skill 是纯文本 + 三个 Python 文件，不依赖任何服务，跨 agent 通用。
 
+### Windows 11 说明
+
+本 Skill 的写作规范跨平台；PDF 渲染器还需要本机安装 Chromium/Playwright 和 Poppler（`pdfinfo`、`pdftotext`、`pdftoppm`）。建议使用 Python 3.11 独立虚拟环境，先运行：
+
+```powershell
+python assets\doctor.py
+```
+
+Poppler 不在 PATH 时，可用 `HUASHU_PDFINFO`、`HUASHU_PDFTOTEXT`、`HUASHU_PDFTOPPM` 指向对应的 `.exe`。不要把真实浏览器用户资料目录交给报告流水线。
+
+建议在提交前运行 `python -m unittest discover -s tests`；Python 3.14 可能可用，但生产环境建议固定 Python 3.11 虚拟环境。
+
 ```bash
 # Claude Code
 git clone https://github.com/alchaincyf/huashu-report ~/.claude/skills/huashu-report
